@@ -1,6 +1,6 @@
 const { ApolloServer, gql } = require("apollo-server");
 
-const students = [
+let students = [
   {
     id: 1,
     name: "Syed Muhemin Ali",
@@ -28,6 +28,29 @@ const resolvers = {
   Query: {
     students: () => students,
   },
+  Mutation:{
+    addStudent: (e, {input}) => {
+     students.push(
+      {
+        name: input.name,
+        email: input.email,
+        address: input.address,
+        age: input.age,
+        id: input.id
+      }
+     )
+
+      return {
+        
+          name: input.name,
+          email: input.email,
+          address: input.address,
+          age: input.age,
+          id: input.id
+        
+      }
+    }
+  }
 };
 
 const typeDefs = gql`
@@ -39,8 +62,20 @@ const typeDefs = gql`
     age: Int
   }
 
+  input StdInput {
+    id: Int
+    name: String
+    email: String
+    address: String
+    age: Int
+  }
+
   type Query {
     students: [Student]
+  }
+
+  type Mutation {
+    addStudent(input: StdInput): Student
   }
 `;
 
